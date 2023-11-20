@@ -23,7 +23,11 @@ import "./styles.css";
   }]
   */
 const getCat = (page = 0) => {
-  return fetch(`https://api.thecatapi.com/v1/images/search?page=${page}`)
+  return fetch(`https://api.thecatapi.com/v1/images/search?page=${page}&order=ASC&breed_ids=beng`, {
+    headers: {
+      'x-api-key': 'live_7H4S77pmqI27UsJ9ZG1xtj2BVojwStzTIBGYum6tuzHl1oEBLXTldtgS9Ou74d2j'
+    }
+  })
     .then((r) => r.json())
     .then((r) => r[0]);
 };
@@ -35,42 +39,7 @@ export const App = () => {
   const [cats, setCats] = useState([]);
   const [progress, setProgress] = useState(0);
   const [pagination, setPagination] = useState(0);
-
-  /**
-   * @param {function} callback
-   * @return {number} time (ms)
-   */
-  function throttle(callback, time) {
-    // TODO:
-  }
-
-  // Функция throttle будет принимать 2 аргумента:
-  // - callee, функция, которую надо вызывать;
-  // - timeout, интервал в мс, с которым следует пропускать вызовы.
-  // function throttle(callee, timeout) {
-  //   // Таймер будет определять,
-  //   // надо ли нам пропускать текущий вызов.
-  //   let timer = null
-
-  //   // Как результат возвращаем другую функцию.
-  //   // Это нужно, чтобы мы могли не менять другие части кода,
-  //   // чуть позже мы увидим, как это помогает.
-  //   return function perform(...args) {
-  //     // Если таймер есть, то функция уже была вызвана,
-  //     // и значит новый вызов следует пропустить.
-  //     if (timer) return
-
-  //     // Если таймера нет, значит мы можем вызвать функцию:
-  //     timer = setTimeout(() => {
-  //       // Аргументы передаём неизменными в функцию-аргумент:
-  //       callee(...args)
-
-  //       // По окончании очищаем таймер:
-  //       clearTimeout(timer)
-  //       timer = null
-  //     }, timeout)
-  //   }
-  // }
+  const [isLoading, setLoading] = useState(false);
 
   function recalculateProgress(e) {
     // Высота экрана:
@@ -91,10 +60,7 @@ export const App = () => {
     // Проставляем посчитанное значение
     // в качестве значения для value прогресс-бара:
     setProgress(percent);
-    console.log("recalculateProgress", percent, e);
   }
-
-  const throttledScrollChangeHandler = throttle(recalculateProgress, 100);
 
   useEffect(() => {
     document.addEventListener("scroll", recalculateProgress);
@@ -103,19 +69,21 @@ export const App = () => {
         window.scrollY / (document.body.offsetHeight - window.innerHeight) >
         0.9
       ) {
-        setPagination((p) => p + 10);
+        setPagination((p) => p + 3);
       }
     });
   }, []);
 
   useEffect(() => {
+    setLoading(true)
     Promise.all(
-      Array(10)
+      Array(3)
         .fill(0)
         .map(() => getCat(pagination))
     ).then((values) => {
       console.log(values);
       setCats((p) => [...p, ...values]);
+      setLoading(false)
     });
   }, [pagination]);
 
@@ -123,8 +91,8 @@ export const App = () => {
     <div>
       <div>
         Nav:
-        <button onClick={() => setPage("main")}>main</button>
-        <button onClick={() => setPage("second")}>second</button>
+        <button onClick={() => setPage("todo")}>todo</button>
+        <button onClick={() => setPage("cats")}>cats</button>
         <button onClick={() => setPage("third")}>third</button>
       </div>
 
@@ -150,24 +118,25 @@ export const App = () => {
               <hr />
 
               <div>
-                {todos.map((todo) => (
-                  <div key={todo}>{todo}</div>
+                {todos.map((todo, i) => (
+                  <div key={todo}>{todo} <button onClick={() => setTodos(todos.filter((_, j) => i !== j))}>x</button></div>
                 ))}
               </div>
             </div>
           </div>
         )}
-        {page === "second" && (
+        {page === "cats" && (
           <div>
             <h2>cats</h2>
             <progress value={progress} max="100" />
             <div>
               {cats.map((cat, i) => (
                 <div key={i}>
-                  {i + 1} - <img src={cat.url} style={{ height: "100px" }} />
+                  {i + 1} - {cat.id} - <img src={cat.url} style={{ height: "100px" }} />
                 </div>
               ))}
             </div>
+            {isLoading && <div>Loading...</div>}
           </div>
         )}
         {page === "third" && <div>page 3</div>}
