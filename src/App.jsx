@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import _ from "lodash";
-import "./styles.scss";
+import "./styles.css";
 
 /**
  * @see https://thecatapi.com/
