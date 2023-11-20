@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { Fibo } from "./Fibo";
 import _ from "lodash";
 import "./styles.css";
 
@@ -23,11 +24,14 @@ import "./styles.css";
   }]
   */
 const getCat = (page = 0) => {
-  return fetch(`https://api.thecatapi.com/v1/images/search?page=${page}&order=ASC&breed_ids=beng`, {
-    headers: {
-      // 'x-api-key': 'live_7H4S77pmqI27UsJ9ZG1xtj2BVojwStzTIBGYum6tuzHl1oEBLXTldtgS9Ou74d2j'
+  return fetch(
+    `https://api.thecatapi.com/v1/images/search?page=${page}&order=ASC&breed_ids=beng`,
+    {
+      headers: {
+        // 'x-api-key': 'live_7H4S77pmqI27UsJ9ZG1xtj2BVojwStzTIBGYum6tuzHl1oEBLXTldtgS9Ou74d2j'
+      },
     }
-  })
+  )
     .then((r) => r.json())
     .then((r) => r[0]);
 };
@@ -75,7 +79,7 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     Promise.all(
       Array(3)
         .fill(0)
@@ -83,25 +87,35 @@ export const App = () => {
     ).then((values) => {
       console.log(values);
       setCats((p) => [...p, ...values]);
-      setLoading(false)
+      setLoading(false);
     });
   }, [pagination]);
 
   return (
     <div>
-      <div>
-        Nav:
-        <button onClick={() => setPage("todo")}>todo</button>
-        <button onClick={() => setPage("cats")}>cats</button>
-        <button onClick={() => setPage("third")}>third</button>
+      <div className="nav">
+        <nav>
+          <ul>
+            <li>
+              <button onClick={() => setPage("todo")}>todo</button>
+            </li>
+            <li>
+              <button onClick={() => setPage("cats")}>cats</button>
+            </li>
+            <li>
+              <button onClick={() => setPage("form")}>form</button>
+            </li>
+            <li>
+              <button onClick={() => setPage("fibo")}>fibo</button>
+            </li>
+          </ul>
+        </nav>
       </div>
 
-      <hr />
-
-      <div>
+      <div className="content">
         {page === "" && (
           <div>
-            <div>Today's Todos</div>
+            <h1>Today's Todos</h1>
 
             <div>
               <input
@@ -119,7 +133,14 @@ export const App = () => {
 
               <div>
                 {todos.map((todo, i) => (
-                  <div key={todo}>{todo} <button onClick={() => setTodos(todos.filter((_, j) => i !== j))}>x</button></div>
+                  <div key={todo}>
+                    {todo}{" "}
+                    <button
+                      onClick={() => setTodos(todos.filter((_, j) => i !== j))}
+                    >
+                      x
+                    </button>
+                  </div>
                 ))}
               </div>
             </div>
@@ -127,19 +148,31 @@ export const App = () => {
         )}
         {page === "cats" && (
           <div>
-            <h2>cats</h2>
+            <h1>cats</h1>
             <progress value={progress} max="100" />
             <div>
               {cats.map((cat, i) => (
                 <div key={i}>
-                  {i + 1} - {cat.id} - <img src={cat.url} style={{ height: "100px" }} />
+                  {i + 1} <img src={cat.url} style={{ height: "100px" }} /> -{" "}
+                  {cat.id}
                 </div>
               ))}
             </div>
             {isLoading && <div>Loading...</div>}
           </div>
         )}
-        {page === "third" && <div>page 3</div>}
+        {page === "form" && (
+          <div>
+            <h1>form</h1>
+          </div>
+        )}
+
+        {page === "fibo" && (
+          <div>
+            <h1>fibo</h1>
+            <Fibo />
+          </div>
+        )}
       </div>
     </div>
   );

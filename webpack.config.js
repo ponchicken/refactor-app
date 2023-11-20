@@ -17,6 +17,7 @@ const plugins = [
   }),
   new MiniCssExtractPlugin({
     filename: '[name].[contenthash].css',
+  }),
 ]
 
 if (process.env.SERVE) {
@@ -43,6 +44,10 @@ module.exports = {
   optimization: {
     runtimeChunk: 'single',
   },
+
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
   
   module: {
   	rules: [
@@ -59,7 +64,7 @@ module.exports = {
         type: mode === 'production' ? 'asset' : 'asset/resource',
       },
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -67,17 +72,7 @@ module.exports = {
             cacheDirectory: true,
           },
         },
-      },
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            cacheDirectory: true,
-          },
-        },
-      },
+      }
     ],
   }
 }
