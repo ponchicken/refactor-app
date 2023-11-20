@@ -25,7 +25,7 @@ import "./styles.css";
 const getCat = (page = 0) => {
   return fetch(`https://api.thecatapi.com/v1/images/search?page=${page}&order=ASC&breed_ids=beng`, {
     headers: {
-      'x-api-key': 'live_7H4S77pmqI27UsJ9ZG1xtj2BVojwStzTIBGYum6tuzHl1oEBLXTldtgS9Ou74d2j'
+      // 'x-api-key': 'live_7H4S77pmqI27UsJ9ZG1xtj2BVojwStzTIBGYum6tuzHl1oEBLXTldtgS9Ou74d2j'
     }
   })
     .then((r) => r.json())
