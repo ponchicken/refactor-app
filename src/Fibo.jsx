@@ -4,19 +4,6 @@ import { useEffect } from "react";
 const randomColor = () =>
   `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 
-const fiboCache = {};
-
-const fibo = (n) => {
-  if (fiboCache.hasOwnProperty(n)) return fiboCache[n];
-
-  if (n <= 1) {
-    return n;
-  }
-
-  fiboCache[n] = fibo(n - 1) + fibo(n - 2);
-  return fiboCache[n];
-};
-
 export const Fibo = () => {
   const [calcTimes, setCalcTimes] = useState([]);
   const maxCalcTime = useMemo(
@@ -37,7 +24,7 @@ export const Fibo = () => {
 
   useEffect(() => {
     const now = Date.now();
-    const result = fibo(n);
+    const result = calcFibonacci(n);
 
     const addCalcTime = (n, calcTime) => {
       setCalcTimes((p) => [{ n, calcTime, id: p.length }, ...p]);
@@ -55,6 +42,14 @@ export const Fibo = () => {
         value={n}
         onChange={(e) => setN(Number(e.target.value))}
       />
+      <br />
+      <input
+        type="number"
+        max={100}
+        min={1}
+        value={n}
+        onChange={(e) => setN(Number(e.target.value))}
+      />
 
       <div>result: {result}</div>
 
@@ -64,7 +59,7 @@ export const Fibo = () => {
             key={c.id}
             style={{
               width: `calc(${c.calcTime} / ${maxCalcTime} * 100%)`,
-              backgroundColor: randomColor(),
+              backgroundColor: randomColor(c.n),
               whiteSpace: "nowrap",
             }}
           >
