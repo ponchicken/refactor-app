@@ -100,13 +100,13 @@ export const App = () => {
               <button onClick={() => setPage("todo")}>todo</button>
             </li>
             <li>
+              <button onClick={() => setPage("fibo")}>fibo</button>
+            </li>
+            <li>
               <button onClick={() => setPage("cats")}>cats</button>
             </li>
             <li>
               <button onClick={() => setPage("form")}>form</button>
-            </li>
-            <li>
-              <button onClick={() => setPage("fibo")}>fibo</button>
             </li>
           </ul>
         </nav>
