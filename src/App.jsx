@@ -42,6 +42,7 @@ export const App = () => {
   const [todos, setTodos] = useState([]);
   const [inputText, setInputText] = useState("");
   const [cats, setCats] = useState([]);
+  const [catId, setCatId] = useState("");
   const [progress, setProgress] = useState(0);
   const [pagination, setPagination] = useState(0);
   const [isLoading, setLoading] = useState(false);
@@ -152,12 +153,23 @@ export const App = () => {
             <h1>cats</h1>
             <progress value={progress} max="100" />
             <div>
-              {cats.map((cat, i) => (
-                <div key={i}>
-                  {i + 1} <img src={cat.url} style={{ height: "100px" }} /> -{" "}
-                  {cat.id}
-                </div>
-              ))}
+              <input
+                type="search"
+                placeholder="Find cat with id"
+                value={catId}
+                onChange={(e) => setCatId(e.target.value)}
+              />
+            </div>
+            <hr />
+            <div>
+              {cats
+                .filter((cat) => cat.id.includes(catId))
+                .map((cat, i) => (
+                  <div key={i}>
+                    {i + 1} <img src={cat.url} style={{ height: "100px" }} /> -{" "}
+                    {cat.id}
+                  </div>
+                ))}
             </div>
             {isLoading && <div>Loading...</div>}
           </div>
