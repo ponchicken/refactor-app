@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Fibo } from "./Fibo";
+import { Space } from "./Space";
 import _ from "lodash";
 import "./styles.css";
 
@@ -106,7 +107,7 @@ export const App = () => {
               <button onClick={() => setPage("cats")}>cats</button>
             </li>
             <li>
-              <button onClick={() => setPage("form")}>form</button>
+              <button onClick={() => setPage("space")}>space</button>
             </li>
           </ul>
         </nav>
@@ -161,9 +162,10 @@ export const App = () => {
             {isLoading && <div>Loading...</div>}
           </div>
         )}
-        {page === "form" && (
+        {page === "space" && (
           <div>
-            <h1>form</h1>
+            <h1>space</h1>
+            <Space />
           </div>
         )}
 
