@@ -14,9 +14,7 @@ export const Fibo = () => {
   };
 
   useEffect(() => {
-    const result = calcFibonacci(n);
-
-    setResult(result);
+    setResult(calcFibonacci(n));
   }, [n]);
 
   return (
