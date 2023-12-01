@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
-import { Fibo } from "./Fibo";
-import { Space } from "./Space";
-import _ from "lodash";
-import "./styles.css";
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import { Fibo } from './Fibo';
+import './styles.css';
 
 /**
  * @see https://thecatapi.com/
@@ -25,29 +23,26 @@ import "./styles.css";
   }]
   */
 const getCat = (page = 0) => {
-  return fetch(
-    `https://api.thecatapi.com/v1/images/search?page=${page}&order=ASC&breed_ids=beng`,
-    {
-      headers: {
-        // 'x-api-key': 'live_7H4S77pmqI27UsJ9ZG1xtj2BVojwStzTIBGYum6tuzHl1oEBLXTldtgS9Ou74d2j'
-      },
-    }
-  )
+  return fetch(`https://api.thecatapi.com/v1/images/search?page=${page}&order=ASC&breed_ids=beng`, {
+    headers: {
+      // 'x-api-key': 'live_7H4S77pmqI27UsJ9ZG1xtj2BVojwStzTIBGYum6tuzHl1oEBLXTldtgS9Ou74d2j'
+    },
+  })
     .then((r) => r.json())
     .then((r) => r[0]);
 };
 
 export const App = () => {
-  const [page, setPage] = useState("");
-  const [todos, setTodos] = useState([]);
-  const [inputText, setInputText] = useState("");
-  const [cats, setCats] = useState([]);
-  const [catId, setCatId] = useState("");
+  const [page, setPage] = useState('');
+  const [todos, setTodos] = useState<string[]>([]);
+  const [inputText, setInputText] = useState('');
+  const [cats, setCats] = useState<any[]>([]);
+  const [catId, setCatId] = useState('');
   const [progress, setProgress] = useState(0);
   const [pagination, setPagination] = useState(0);
   const [isLoading, setLoading] = useState(false);
 
-  function recalculateProgress(e) {
+  function recalculateProgress() {
     // Высота экрана:
     const viewportHeight = window.innerHeight;
     // Высота страницы:
@@ -69,12 +64,9 @@ export const App = () => {
   }
 
   useEffect(() => {
-    document.addEventListener("scroll", recalculateProgress);
-    document.addEventListener("scroll", () => {
-      if (
-        window.scrollY / (document.body.offsetHeight - window.innerHeight) >
-        0.9
-      ) {
+    document.addEventListener('scroll', recalculateProgress);
+    document.addEventListener('scroll', () => {
+      if (window.scrollY / (document.body.offsetHeight - window.innerHeight) > 0.9) {
         setPagination((p) => p + 3);
       }
     });
@@ -85,7 +77,7 @@ export const App = () => {
     Promise.all(
       Array(3)
         .fill(0)
-        .map(() => getCat(pagination))
+        .map(() => getCat(pagination)),
     ).then((values) => {
       console.log(values);
       setCats((p) => [...p, ...values]);
@@ -99,23 +91,20 @@ export const App = () => {
         <nav>
           <ul>
             <li>
-              <button onClick={() => setPage("todo")}>todo</button>
+              <button onClick={() => setPage('todo')}>todo</button>
             </li>
             <li>
-              <button onClick={() => setPage("fibo")}>fibo</button>
+              <button onClick={() => setPage('fibo')}>fibo</button>
             </li>
             <li>
-              <button onClick={() => setPage("cats")}>cats</button>
-            </li>
-            <li>
-              <button onClick={() => setPage("space")}>space</button>
+              <button onClick={() => setPage('cats')}>cats</button>
             </li>
           </ul>
         </nav>
       </div>
 
       <div className="content">
-        {page === "" && (
+        {page === '' && (
           <div>
             <h1>Today's Todos</h1>
 
@@ -136,19 +125,14 @@ export const App = () => {
               <div>
                 {todos.map((todo, i) => (
                   <div key={todo}>
-                    {todo}{" "}
-                    <button
-                      onClick={() => setTodos(todos.filter((_, j) => i !== j))}
-                    >
-                      x
-                    </button>
+                    {todo} <button onClick={() => setTodos(todos.filter((_, j) => i !== j))}>x</button>
                   </div>
                 ))}
               </div>
             </div>
           </div>
         )}
-        {page === "cats" && (
+        {page === 'cats' && (
           <div>
             <h1>cats</h1>
             <progress value={progress} max="100" />
@@ -166,22 +150,15 @@ export const App = () => {
                 .filter((cat) => cat.id.includes(catId))
                 .map((cat, i) => (
                   <div key={i}>
-                    {i + 1} <img src={cat.url} style={{ height: "100px" }} /> -{" "}
-                    {cat.id}
+                    {i + 1} <img src={cat.url} style={{ height: '100px' }} /> - {cat.id}
                   </div>
                 ))}
             </div>
             {isLoading && <div>Loading...</div>}
           </div>
         )}
-        {page === "space" && (
-          <div>
-            <h1>space</h1>
-            <Space />
-          </div>
-        )}
 
-        {page === "fibo" && (
+        {page === 'fibo' && (
           <div>
             <h1>fibo</h1>
             <Fibo />
